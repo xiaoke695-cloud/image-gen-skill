@@ -1,0 +1,23 @@
+﻿# ---- 本地密钥：绝对不能提交 ----
+.env
+.env.*
+!.env.example
+.relaycore/
+*.key
+*.pem
+
+# ---- 生成的图片与临时产物 ----
+out/
+tmp/
+*.tmp
+
+# ---- Node ----
+node_modules/
+npm-debug.log*
+
+# ---- 系统与编辑器 ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log

@@ -34,6 +34,23 @@ for (let i = 1; i < argv.length; i++) {
   }
 }
 
+/* ------------------------------ .env 加载 ------------------------------ */
+// 读取项目根目录 / 当前目录的 .env（不覆盖已存在的环境变量）
+// 这样 Key 可以只放在本地 .env 里，由 .gitignore 保证永不提交
+function loadDotEnv() {
+  for (const file of [path.join(import.meta.dirname, "..", ".env"), path.join(process.cwd(), ".env")]) {
+    if (!existsSync(file)) continue;
+    for (const line of fsReadFileSync(file, "utf8").split(/\r?\n/)) {
+      const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
+      if (!m) continue;
+      let v = m[2].trim();
+      if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
+      if (!process.env[m[1]]) process.env[m[1]] = v;
+    }
+    break;
+  }
+}
+loadDotEnv();
 function findKey() {
   if (process.env.RELAYCORE_API_KEY) return { key: process.env.RELAYCORE_API_KEY.trim(), from: "env RELAYCORE_API_KEY" };
 
